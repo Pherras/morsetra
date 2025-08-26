@@ -1,7 +1,11 @@
+
 from itertools import chain
 
-from dicts import rus_to_morse, nums_to_morse, other_to_morse
+from dicts import rus_to_morse, nums_to_morse, other_to_morse, eng_to_morse
+from txt import read_file, write_file
 
+INPUT_FILE = 'input.txt'
+OUTPUT_FILE = 'output.txt'
 
 def encode(text, lang_dict):
     result = []
@@ -34,13 +38,28 @@ def decode(code, lang_dict):
 
     return ''.join(result)
 
+def choice(mode_conv: str, lang: str, input = INPUT_FILE, output = OUTPUT_FILE):
+    """Выбрать режим и язык, дополнительно можно указать входной и выходной файлы.
+    Подходящие режимы: 'encode', 'decode'.
+    Подходящие языки: 'rus', 'eng'."""
+    code = None
+    text = read_file(input)
+    if mode_conv == "encode":
+        if lang == "rus":
+            code = encode(text, rus_to_morse)
+        else: code = encode(text, eng_to_morse)
+    else:
+        if lang == "rus":
+            code = decode(text, rus_to_morse)
+        else: code = decode(text, eng_to_morse)
+
+    write_file(code, output)
+
+
 
 def main():
+    choice(mode_conv = 'encode', lang = 'rus')
 
-    tmp_1 = encode("Привет, мир! 11", rus_to_morse)
-    tmp_2 = decode(tmp_1, rus_to_morse)
-    print(tmp_1)
-    print(tmp_2)
 
 
 if __name__ == '__main__':
